@@ -1114,13 +1114,16 @@ export default Ember.Component.extend(ClusterDriver, {
       this.fetch('InstanceType', 'InstanceTypes', externalParams)
         .then((instanceTypes) => {
           this.fetchAvailableInstances().then((availableResources) => {
-            set(this, 'instanceChoices', instanceTypes.filter((instanceType) => availableResources.indexOf(instanceType.value) > -1).map((instanceType) => {
+            const instances = instanceTypes.filter((instanceType) => availableResources.indexOf(instanceType.value) > -1).map((instanceType) => {
               return {
                 group: instanceType.raw.InstanceTypeFamily,
                 value: instanceType.value,
                 label: `${ instanceType.raw.InstanceTypeId } ( ${ instanceType.raw.CpuCoreCount } ${ instanceType.raw.CpuCoreCount > 1 ? 'Cores' : 'Core' } ${ instanceType.raw.MemorySize }GB RAM )`,
+                cpu: instanceType.raw.CpuCoreCount,
+                memory: instanceType.raw.MemorySize,
               };
-            }));
+            })
+            set(this, 'instanceChoices', instances.sort((a, b) => (a.cpu > b.cpu || a.memory > b.memory) ? 1 : -1));
 
             if (type === 'master'){
               let instanceType;
