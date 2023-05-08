@@ -49,7 +49,7 @@ const VERSIONS = [
     value:          K8S_1_20_11,
     label:          K8S_1_20_11,
     rancherEnabled: true,
-    aliyunEnabled:  true,
+    aliyunEnabled:  false,
   },
 ];
 const DEFAULT_KUBERNETES_VERSION = K8S_1_24_6;
